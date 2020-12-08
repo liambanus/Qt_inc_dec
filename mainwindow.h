@@ -18,6 +18,6 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    int count, time;
+    int count, time, patience;
 };
 #endif // MAINWINDOW_H
