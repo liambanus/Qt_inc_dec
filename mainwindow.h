@@ -12,12 +12,23 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+
+    //void on_displayCnt_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
+    void update();
 
     int count, time, patience;
+
+    void DatabaseConnect();
+        void DatabaseInit();
+        void DatabasePopulate();
 };
 #endif // MAINWINDOW_H
