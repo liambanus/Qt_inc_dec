@@ -1,7 +1,10 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+//#ifndef MAINWINDOW_H
+//#define MAINWINDOW_H
+//#include <QDebug>
+#pragma once
 
 #include <QMainWindow>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,7 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -27,8 +30,12 @@ private:
 
     int count, time, patience;
 
+   /*For SQLite the only configuration needed is the database name. We can set that with setDatabaseName.
+
+It’s important to notice that “:memory:” is a special name for SQLite. It will create a temporary database existing entirely in memory until the connection is closed. In case you wanted to create a permanent SQLite database on disk, you have to pass a full file path to setDatabaseName.
+ */
     void DatabaseConnect();
         void DatabaseInit();
         void DatabasePopulate();
 };
-#endif // MAINWINDOW_H
+//#endif // MAINWINDOW_H
