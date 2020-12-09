@@ -64,7 +64,18 @@ void MainWindow::DatabaseInit()
 void MainWindow::DatabasePopulate()
 {
     QSqlQuery query;
-    if(!query.exec("INSERT INTO readings (count) VALUES(1)"))
+    int cnt = this->count;
+    //possible alternative way to escape and insert readings directly:
+    //if(!query.exec("INSERT INTO readings (count) VALUES( '"+cnt+"')"))
+
+    //this was the cleanest method of inserting a variable to the database; preparing/binding values
+    //https://forum.qt.io/topic/117567/how-to-insert-numbers-in-sqlite-database
+    query.prepare("INSERT INTO readings (count) VALUES(?)");
+
+    query.addBindValue(cnt);
+    if(!query.exec())
+
+
      //if(!query.exec("INSERT INTO people(name) VALUES('Eddie Guerrero')"))
             qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
 }
