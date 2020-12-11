@@ -7,6 +7,16 @@
 #include <QSqlQuery>
 #include <QDebug>
 
+#include <QDate>
+#include <QDateTime>
+
+// to examine db contents in text file navigate to folder and use this command: sqlite3 sqldb3 .dump > database-file.txt
+
+// cd Dropbox/DCU/EmSys\ 513/Qt_inc_dec/build-Qt_inc_dec-Desktop_Qt_5_9_9_GCC_64bit-Debug/
+
+//keyboard mapped to mouse https://www.linuxuprising.com/2019/11/how-to-bind-mouse-buttons-to-keyboard.html
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -54,31 +64,49 @@ void MainWindow::DatabaseConnect()
 
 void MainWindow::DatabaseInit()
 {
-    QSqlQuery query("CREATE TABLE readings (id INTEGER PRIMARY KEY, count INTEGER)");
+    //check here if db exists and if so change to insert
+    QSqlQuery query("CREATE TABLE readings2 (id INTEGER PRIMARY KEY, count INTEGER, Timestamp table_date_time)");
  //QSqlQuery query("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT)");
     if(!query.isActive())
         qWarning() << "MainWindow::DatabaseInit - ERROR: " << query.lastError().text();
 
 }
-
 void MainWindow::DatabasePopulate()
 {
     QSqlQuery query;
     int cnt = this->count;
+
     //possible alternative way to escape and insert readings directly:
     //if(!query.exec("INSERT INTO readings (count) VALUES( '"+cnt+"')"))
 
     //this was the cleanest method of inserting a variable to the database; preparing/binding values
     //https://forum.qt.io/topic/117567/how-to-insert-numbers-in-sqlite-database
-    query.prepare("INSERT INTO readings (count) VALUES(?)");
+
+    query.prepare("INSERT INTO readings2 (count, Timestamp) VALUES(?,?)");
+    //QDateTime timestamp = QDateTime::currentDateTime();
+   // timestamp.addDays(1);
 
     query.addBindValue(cnt);
+     query.addBindValue(QDateTime:: currentDateTime());
+    //(Timestamp)
+
+   // query.bindValue(":datetime", timestamp);// 2017-09-05T11:50:39
+    // Custom format
+   // query.bindValue(":datetime", timestamp.toString("yyyy-MM-dd hh:mm:ss"));  // same as above but without the T
+
+
+   // query.addBindValue("2004-12-11 13:00:00");
+   // query.addBindValue(1, "+1 day");
     if(!query.exec())
 
 
      //if(!query.exec("INSERT INTO people(name) VALUES('Eddie Guerrero')"))
             qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
 }
+
+//need a function for generating time stamp or just use predefs?
+
+
 
 void MainWindow::on_pushButton_clicked()
 {
