@@ -9,6 +9,7 @@
 
 #include <QDate>
 #include <QDateTime>
+#include <QTime>
 
 // to examine db contents in text file navigate to folder and use this command: sqlite3 sqldb3 .dump > database-file.txt
 
@@ -38,7 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow:: update(){
     QString text = QString("%1").arg(this->count);
-    ui->displayCnt->setText(text);
+    //ui->displayCnt->setText(text);
     DatabasePopulate();
     //record value and time to export to sql database?
 }
@@ -73,6 +74,8 @@ void MainWindow::DatabaseInit()
 }
 void MainWindow::DatabasePopulate()
 {
+
+   // https://doc.qt.io/qt-5/sql-sqlstatements.html
     QSqlQuery query;
     int cnt = this->count;
 
@@ -87,7 +90,15 @@ void MainWindow::DatabasePopulate()
    // timestamp.addDays(1);
 
     query.addBindValue(cnt);
-     query.addBindValue(QDateTime:: currentDateTime());
+
+
+   //QString curtime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+   QString curtime = QDateTime::currentDateTime().toString("HH:mm:ss");
+   // QString QDate::toString(Qt::DateFormat format = Qt::TextDate) const
+
+    query.addBindValue(curtime);
+
+    //QString QTime::toString(QStringView format) const
     //(Timestamp)
 
    // query.bindValue(":datetime", timestamp);// 2017-09-05T11:50:39
@@ -119,4 +130,36 @@ void MainWindow::on_pushButton_2_clicked()
 {
     this->count--;
     update();
+}
+
+void MainWindow:: delay()
+{
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+
+
+
+
+    QSqlQuery query;
+    query.prepare("SELECT Timestamp FROM readings2 WHERE id = 1");
+    //query.addBindValue(mInputText->text().toInt());
+
+    if(!query.exec())
+      qWarning() << "ERROR: " << query.lastError().text();
+
+
+
+    if(query.first())
+      ui->mOutputText->setText(query.value(0).toString());
+    else
+       ui->mOutputText->setText("person not found");
+
+    //QString text = QString("%1").arg(this->count);
+   // ui->displayCnt->setText(text);
+    //update();
 }

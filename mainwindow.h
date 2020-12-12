@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QLineEdit>
 
 
 QT_BEGIN_NAMESPACE
@@ -21,14 +22,17 @@ public:
 private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
-
+   void on_pushButton_3_clicked();
     //void on_displayCnt_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
     void update();
+    void delay();//helper debugger function
 
     int count, time, patience;
+
+    QLineEdit * mOutputText;
 
    /*For SQLite the only configuration needed is the database name. We can set that with setDatabaseName.
 
